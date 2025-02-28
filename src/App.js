@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import RequestForm from './RequestForm';
 import DynamicForm from './Form';
 import BodyEditor from './BodyEditor';
 import RequestResult from './RequestResult';
-import { sendHttpRequest } from './httpRequest';
+import CustomdataBar from './Customdata'
+import { sendHttpRequest } from './utils/httpRequest';
 
 function App() {
   const [headers, setHeaders] = useState([{ key: '', value: '', checked: false }]);
@@ -11,11 +12,23 @@ function App() {
   const [body, setBody] = useState('');
   const [result, setResult] = useState(null);
   const [currentTab, setCurrentTab] = useState('header');
+  const [metadata, setMetadata] = useState({ method: 'GET', url: '' })
+  const [customdata, setCustomdata] = useState('New Request')
 
-  const handleSubmit = async (requestConfig) => {
-    const response = await sendHttpRequest(requestConfig, headers, params, body);
+  const onSubmit = useCallback(async () => {
+    const response = await sendHttpRequest(metadata, headers, params, body);
     setResult(response);
-  };
+  }, [metadata, headers, params, body])
+
+  const onSave = useCallback(async () => {
+    console.log('try to save request')
+    console.log(customdata)
+    console.log(metadata)
+    console.log(headers)
+    console.log(params)
+    console.log(body)
+    console.log('==================')
+  }, [customdata, metadata, headers, params, body])
 
   const renderFormContent = () => {
     switch (currentTab) {
@@ -37,7 +50,8 @@ function App() {
 
   return (
     <div>
-      <RequestForm onSubmit={handleSubmit} />
+      <CustomdataBar customdata={customdata} setCustomdata={setCustomdata} onSave={onSave}/>
+      <RequestForm metadata={metadata} setMetadata={setMetadata} onSubmit={onSubmit}/>
 
       <nav>
         <button className={`tab-button ${isTabActive('header', currentTab)}`} onClick={() => setCurrentTab('header')}>Headers</button>

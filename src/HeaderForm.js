@@ -5,6 +5,7 @@ function HeaderForm({ headers, setHeaders }) {
     setHeaders([...headers, { checked: false, key: '', value: '' }]);
   };
 
+  // TODO: potentially has problem?
   const updateHeader = (index, field, value) => {
     const newHeaders = [...headers];
     newHeaders[index][field] = value;
