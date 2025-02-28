@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import RequestForm from './RequestForm';
+import RequestMeta from './RequestMeta';
 import DynamicForm from './Form';
 import BodyEditor from './BodyEditor';
 import RequestResult from './RequestResult';
@@ -51,7 +51,7 @@ function App() {
   return (
     <div>
       <CustomdataBar customdata={customdata} setCustomdata={setCustomdata} onSave={onSave}/>
-      <RequestForm metadata={metadata} setMetadata={setMetadata} onSubmit={onSubmit}/>
+      <RequestMeta metadata={metadata} setMetadata={setMetadata} onSubmit={onSubmit}/>
 
       <nav>
         <button className={`tab-button ${isTabActive('header', currentTab)}`} onClick={() => setCurrentTab('header')}>Headers</button>

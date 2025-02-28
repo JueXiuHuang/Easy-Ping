@@ -1,0 +1,36 @@
+.optGreen {
+	color: var(--green);
+}
+
+.optBlue {
+	color: var(--blue);
+}
+
+.optOrange {
+	color: var(--orange);
+}
+
+.optRed {
+	color: var(--red);
+}
+
+.optPurple {
+	color: var(--purple);
+}
+
+.optBrown {
+	color: var(--brown);
+}
+
+.requestMeta {
+	display: flex;
+	margin-top: var(--vertical-gap);
+}
+
+.requestMethod {
+	min-width: 90px;
+}
+
+.requestUrl {
+	flex-grow: 1;
+}

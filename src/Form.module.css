@@ -1,0 +1,26 @@
+.formRow {
+  display: flex;
+  flex-direction: row;
+  margin-top: var(--vertical-gap);
+  height: 35px;
+  width: 100%;
+}
+
+.formRowSelect {}
+
+.formRowInput {
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 2px solid black;
+  margin-left: 5px;
+  flex: 1;
+}
+
+.buttonNewInputRow {
+	background-color: transparent;
+	width: 30px;
+	color: black;
+	border: 1px solid gray;
+	margin-top: var(--vertical-gap);
+}
