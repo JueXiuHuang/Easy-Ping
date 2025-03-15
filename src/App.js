@@ -19,7 +19,6 @@ function App() {
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [savedRequests, setSavedRequests] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const sidebarRef = useRef(null);
 
   useEffect(() => {
     const storedRequests = localStorage.getItem('savedRequests');
@@ -56,21 +55,6 @@ function App() {
     setIsSidebarOpen(prev => !prev);
   }, []);
 
-  const handleOutsideClick = useCallback((event) => {
-    if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-      setIsSidebarOpen(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isSidebarOpen) {
-      document.addEventListener('mousedown', handleOutsideClick);
-    } else {
-      document.removeEventListener('mousedown', handleOutsideClick);
-    }
-    return () => document.removeEventListener('mousedown', handleOutsideClick);
-  }, [isSidebarOpen, handleOutsideClick]);
-
   const renderFormContent = () => {
     switch (currentTab) {
       case 'header':
@@ -89,12 +73,11 @@ function App() {
   return (
     <div className={`${styles.appContainer}`}>
       <Sidebar
-        ref={sidebarRef}
         savedRequests={savedRequests}
         onSelectRequest={handleRequestSelect}
         selectedRequest={selectedRequest}
         isOpen={isSidebarOpen}
-        toggleSidebar={toggleSidebar}
+        setIsOpen={setIsSidebarOpen}
       />
       <div className={`${styles.mainContent}`}>
         <CustomdataBar customdata={customdata} setCustomdata={setCustomdata} onSave={onSave} toggleSidebar={toggleSidebar} />
