@@ -1,0 +1,22 @@
+.appContainer {
+  display: flex;
+  position: relative;
+}
+
+.mainContent {
+  width: 100%;
+  padding: 20px;
+}
+
+/* .menuButton {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 18px;
+} */

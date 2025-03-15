@@ -1,10 +1,12 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import RequestMeta from './RequestMeta';
 import DynamicForm from './Form';
 import BodyEditor from './BodyEditor';
 import RequestResult from './RequestResult';
 import CustomdataBar from './Customdata'
+import Sidebar from './Sidebar';
 import { sendHttpRequest } from './utils/httpRequest';
+import styles from './App.module.css';
 
 function App() {
   const [headers, setHeaders] = useState([{ key: '', value: '', checked: false }]);
@@ -12,8 +14,19 @@ function App() {
   const [body, setBody] = useState('');
   const [result, setResult] = useState(null);
   const [currentTab, setCurrentTab] = useState('header');
-  const [metadata, setMetadata] = useState({ method: 'GET', url: '' })
-  const [customdata, setCustomdata] = useState('New Request')
+  const [metadata, setMetadata] = useState({ method: 'GET', url: '' });
+  const [customdata, setCustomdata] = useState('New Request');
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [savedRequests, setSavedRequests] = useState([]);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const sidebarRef = useRef(null);
+
+  useEffect(() => {
+    const storedRequests = localStorage.getItem('savedRequests');
+    if (storedRequests) {
+      setSavedRequests(JSON.parse(storedRequests));
+    }
+  }, []);
 
   const onSubmit = useCallback(async () => {
     const response = await sendHttpRequest(metadata, headers, params, body);
@@ -30,6 +43,34 @@ function App() {
     console.log('==================')
   }, [customdata, metadata, headers, params, body])
 
+  const handleRequestSelect = useCallback((request) => {
+    setSelectedRequest(request.name);
+    setCustomdata(request.name);
+    setMetadata(request.metadata);
+    setHeaders(request.headers);
+    setParams(request.params);
+    setBody(request.body);
+  }, []);
+
+  const toggleSidebar = useCallback(() => {
+    setIsSidebarOpen(prev => !prev);
+  }, []);
+
+  const handleOutsideClick = useCallback((event) => {
+    if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+      setIsSidebarOpen(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isSidebarOpen) {
+      document.addEventListener('mousedown', handleOutsideClick);
+    } else {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    }
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, [isSidebarOpen, handleOutsideClick]);
+
   const renderFormContent = () => {
     switch (currentTab) {
       case 'header':
@@ -43,29 +84,38 @@ function App() {
     }
   };
 
-  const isTabActive = (x, y) => {
-    if (x === y) return 'active'
-    return ''
-  };
+  const isTabActive = (x, y) => (x === y ? 'active' : '');
 
   return (
-    <div>
-      <CustomdataBar customdata={customdata} setCustomdata={setCustomdata} onSave={onSave}/>
-      <RequestMeta metadata={metadata} setMetadata={setMetadata} onSubmit={onSubmit}/>
+    <div className={`${styles.appContainer}`}>
+      <Sidebar
+        ref={sidebarRef}
+        savedRequests={savedRequests}
+        onSelectRequest={handleRequestSelect}
+        selectedRequest={selectedRequest}
+        isOpen={isSidebarOpen}
+        toggleSidebar={toggleSidebar}
+      />
+      <div className={`${styles.mainContent}`}>
+        <CustomdataBar customdata={customdata} setCustomdata={setCustomdata} onSave={onSave} toggleSidebar={toggleSidebar} />
+        <RequestMeta metadata={metadata} setMetadata={setMetadata} onSubmit={onSubmit} />
 
-      <nav>
-        <button className={`tab-button ${isTabActive('header', currentTab)}`} onClick={() => setCurrentTab('header')}>Headers</button>
-        <button className={`tab-button ${isTabActive('params', currentTab)}`} onClick={() => setCurrentTab('params')}>Params</button>
-        <button className={`tab-button ${isTabActive('body', currentTab)}`} onClick={() => setCurrentTab('body')}>Body</button>
-      </nav>
+        <nav>
+          <button className={`tab-button ${isTabActive('header', currentTab)}`} onClick={() => setCurrentTab('header')}>Headers</button>
+          <button className={`tab-button ${isTabActive('params', currentTab)}`} onClick={() => setCurrentTab('params')}>Params</button>
+          <button className={`tab-button ${isTabActive('body', currentTab)}`} onClick={() => setCurrentTab('body')}>Body</button>
+        </nav>
 
-      <div className="tab-wrapper">
-        {renderFormContent()}
+        <div className="tab-wrapper">
+          {renderFormContent()}
+        </div>
+
+        <RequestResult result={result} />
       </div>
-
-      <RequestResult result={result} />
     </div>
   );
 }
 
 export default App;
+
+

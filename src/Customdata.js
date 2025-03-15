@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import styles from './Customdata.module.css'
 
-function CustomdataBar({ customdata, setCustomdata, onSave }) {
+function CustomdataBar({ customdata, setCustomdata, onSave, toggleSidebar }) {
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef(null);
 
@@ -17,24 +18,37 @@ function CustomdataBar({ customdata, setCustomdata, onSave }) {
     }
   };
 
-  return isEditing ? (
-    <input
-      ref={inputRef}
-      type="text"
-      value={customdata}
-      onChange={(e) => setCustomdata(e.target.value === '' ? 'New Request' : e.target.value)}
-      onBlur={() => setIsEditing(false)}
-      onKeyDown={handleKeyPress}
-      className="edit-input"
-    />
-  ) : (
-    <span
-      onClick={() => setIsEditing(true)}
-      style={{ cursor: "pointer" }}
-      className="display-text"
-    >
-      {customdata}
-    </span>
+  return (
+    <div className={styles.container}>
+      <div className={styles.left}>
+        <button onClick={toggleSidebar}></button>
+      </div>
+      <div className={styles.center}>
+        {isEditing ? (
+          <input
+            ref={inputRef}
+            type="text"
+            value={customdata}
+            onChange={(e) => setCustomdata(e.target.value === '' ? 'New Request' : e.target.value)}
+            onBlur={() => setIsEditing(false)}
+            onKeyDown={handleKeyPress}
+            className={styles.editInput}
+          />
+        ) : (
+          <span
+            onClick={() => setIsEditing(true)}
+            style={{ cursor: 'pointer' }}
+            className={styles.displayText}
+          >
+            {customdata}
+          </span>
+        )}
+      </div>
+      <div className={styles.right}>
+        <button onClick={onSave}>save</button> {/* 添加 onSave 事件 */}
+        <button>config</button>
+      </div>
+    </div>
   );
 }
 
