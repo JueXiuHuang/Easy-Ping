@@ -1,7 +1,12 @@
 import React from 'react';
+import { useAppContext } from './Context'
 import styles from './Form.module.css'
 
-export default function DynamicForm({ infoList, setInfoList }) {
+export default function DynamicForm({ type }) {
+  const { headers, setHeaders, params, setParams } = useAppContext();
+  const infoList = type === 'headers' ? headers : params;
+  const setInfoList = type === 'headers' ? setHeaders : setParams;
+
   const addEmptyInfo = () => {
     setInfoList([...infoList, { checked: false, key: '', value: '' }]);
   };

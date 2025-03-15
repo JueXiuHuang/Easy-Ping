@@ -1,17 +1,19 @@
 import React, { useRef, useEffect } from 'react';
+import { useAppContext } from './Context';
 import styles from './Sidebar.module.css';
 
-const Sidebar = ({ savedRequests, onSelectRequest, selectedRequest, isOpen, setIsOpen }) => {
+const Sidebar = () => {
+  const { savedRequests, handleRequestSelect, selectedRequest, isSidebarOpen, setIsSidebarOpen } = useAppContext();
   const sidebarRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
-        setIsOpen(false);
+        setIsSidebarOpen(false);
       }
     };
 
-    if (isOpen) {
+    if (isSidebarOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     } else {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -20,15 +22,15 @@ const Sidebar = ({ savedRequests, onSelectRequest, selectedRequest, isOpen, setI
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isOpen, setIsOpen]);
+  }, [isSidebarOpen, setIsSidebarOpen]);
 
   return (
-    <div ref={sidebarRef} className={`${styles.sidebar} ${isOpen ? styles.open : styles.closed}`}>
+    <div ref={sidebarRef} className={`${styles.sidebar} ${isSidebarOpen ? styles.open : styles.closed}`}>
       <div className={styles.sidebarHeader}>
-        {isOpen && <h3>Saved Requests</h3>}
+        {isSidebarOpen && <h3>Saved Requests</h3>}
       </div>
 
-      {isOpen && (
+      {isSidebarOpen && (
         <div className={styles.sidebarContent}>
           {savedRequests.length === 0 ? (
             <p>No saved requests</p>
@@ -38,7 +40,7 @@ const Sidebar = ({ savedRequests, onSelectRequest, selectedRequest, isOpen, setI
                 <li
                   key={index}
                   className={`${styles.requestItem} ${selectedRequest === request.name ? styles.active : ''}`}
-                  onClick={() => onSelectRequest(request)}
+                  onClick={() => handleRequestSelect(request)}
                 >
                   {request.name}
                 </li>

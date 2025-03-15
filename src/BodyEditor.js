@@ -1,7 +1,9 @@
 import React from 'react';
+import { useAppContext } from './Context';
 import 'prismjs/themes/prism.css';
 
-function BodyEditor({ body, setBody }) {
+function BodyEditor() {
+  const { body, setBody } = useAppContext();
   return (
     <div>
       <textarea

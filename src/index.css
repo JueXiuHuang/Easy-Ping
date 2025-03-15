@@ -30,26 +30,6 @@ button {
 	padding-bottom: 2px;
 }
 
-.tab-button {
-	border: none;
-	background-color: transparent;
-	padding: 0.5rem;
-	cursor: pointer;
-	outline: none;
-	color: rgb(105, 105, 105);
-}
-
-.tab-button.active {
-	border-bottom: 2px solid rgb(12, 100, 232);
-	color: black;
-}
-
-.tab-wrapper {
-	display: flex;
-	flex-direction: column;
-	margin-top: var(--vertical-gap);
-}
-
 nav {
 	display: flex;
 	margin-bottom: 20px;

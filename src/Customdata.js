@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useAppContext } from './Context'
 import styles from './Customdata.module.css'
 
-function CustomdataBar({ customdata, setCustomdata, onSave, toggleSidebar }) {
+function CustomdataBar() {
+  const { customdata, setCustomdata, saveRequest, toggleSidebar } = useAppContext();
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef(null);
 
@@ -45,7 +47,7 @@ function CustomdataBar({ customdata, setCustomdata, onSave, toggleSidebar }) {
         )}
       </div>
       <div className={styles.right}>
-        <button onClick={onSave}>save</button> {/* 添加 onSave 事件 */}
+        <button onClick={saveRequest}>save</button>
         <button>config</button>
       </div>
     </div>

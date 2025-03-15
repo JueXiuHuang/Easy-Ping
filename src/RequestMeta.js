@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from 'react';
+import { useAppContext } from './Context';
 import styles from './RequestMeta.module.css'
 
-function RequestMeta({ metadata, setMetadata, onSubmit }) {
+function RequestMeta() {
+  const { metadata, setMetadata, onSubmit } = useAppContext();
   const updateMetadata = (field, value) => {
     setMetadata(prev => ({
       ...prev,

@@ -1,7 +1,9 @@
 import React from 'react';
+import { useAppContext } from './Context';
 import styles from './RequestResult.module.css'
 
-function RequestResult({ result }) {
+function RequestResult() {
+  const { result } = useAppContext();
   if (!result) return null;
 
   return (

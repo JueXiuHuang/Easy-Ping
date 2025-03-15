@@ -8,15 +8,23 @@
   padding: 20px;
 }
 
-/* .menuButton {
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  z-index: 1000;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 5px 10px;
+.tabSwitchBtn {
+  border: none;
+  border-radius: 0px;
+  background-color: transparent;
+  padding: 0.5rem;
   cursor: pointer;
-  font-size: 18px;
-} */
+  outline: none;
+  color: rgb(105, 105, 105);
+}
+
+.tabSwitchBtn.active {
+  border-bottom: 2px solid rgb(12, 100, 232);
+  color: black;
+}
+
+.tabWrapper {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--vertical-gap);
+}
