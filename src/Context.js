@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
 import { sendHttpRequest } from './utils/httpRequest';
 
 const context = createContext();
@@ -17,13 +17,22 @@ export const Context = ({ children }) => {
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [savedRequests, setSavedRequests] = useState([]);
 
+  const isFirstRender = useRef(true);
+
   useEffect(() => {
     const storedRequests = localStorage.getItem('savedRequests');
     if (storedRequests) setSavedRequests(JSON.parse(storedRequests));
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('savedRequests', JSON.stringify(savedRequests));
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    if (savedRequests.length > 0) {
+      localStorage.setItem('savedRequests', JSON.stringify(savedRequests));
+    }
   }, [savedRequests]);
 
   const onSubmit = useCallback(async () => {
@@ -33,10 +42,9 @@ export const Context = ({ children }) => {
 
   const saveRequest = useCallback(() => {
     const newRequest = { name: customdata, metadata, headers, params, body };
-    console.log(newRequest)
     setSavedRequests(prev => {
-      const exists = prev.some(req => req.name === newRequest.name);
-      return exists ? prev : [...prev, newRequest];
+      return prev.map(req => req.name === newRequest.name ? newRequest : req)
+        .concat(prev.some(req => req.name === newRequest.name) ? [] : [newRequest]);
     });
   }, [customdata, metadata, headers, params, body]);
 
