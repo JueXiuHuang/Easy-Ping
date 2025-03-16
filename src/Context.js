@@ -55,6 +55,7 @@ export const Context = ({ children }) => {
     setHeaders(request.headers);
     setParams(request.params);
     setBody(request.body);
+    setIsSidebarOpen(false);
   }, []);
 
   const toggleSidebar = useCallback(() => setIsSidebarOpen(prev => !prev), []);
